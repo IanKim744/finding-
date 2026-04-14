@@ -3,61 +3,90 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>지뢰찾기</title>
+    <title>철책 프로토콜 · 지뢰찾기</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700&family=Space+Grotesk:wght@500;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="app">
-      <header class="header">
-        <h1 class="title">지뢰찾기</h1>
-        <p class="subtitle">
-          좌클릭: 열기 · 우클릭: 깃발 · 열린 숫자 칸에서 가운데 클릭 또는 좌·우 동시 누르기: 주변
-          열기
-        </p>
-      </header>
+    <div class="noise-overlay" aria-hidden="true"></div>
+    <div class="radar-scanline" aria-hidden="true"></div>
+    <div class="chassis-bg" aria-hidden="true"></div>
 
-      <div class="toolbar">
-        <label class="field">
-          <span class="field-label">난이도</span>
-          <select id="difficulty" class="select">
-            <option value="beginner">초급 (9×9, 지뢰 10)</option>
-            <option value="intermediate">중급 (16×16, 지뢰 40)</option>
-            <option value="expert">고급 (30×16, 지뢰 99)</option>
-          </select>
-        </label>
-        <div class="stats">
-          <div class="stat">
-            <span class="stat-label">지뢰</span>
-            <span id="mine-count" class="stat-value lcd">010</span>
-          </div>
-          <button type="button" id="face-btn" class="face-btn" title="새 게임" aria-label="새 게임">
-            <span class="face" id="face">🙂</span>
-          </button>
-          <div class="stat">
-            <span class="stat-label">시간</span>
-            <span id="timer" class="stat-value lcd">000</span>
-          </div>
+    <header class="top-hud">
+      <div class="hud-cluster hud-left">
+        <span class="hud-label">지뢰 잔량</span>
+        <span id="mine-count" class="hud-readout hud-readout--alert">010</span>
+      </div>
+      <div class="hud-cluster hud-center">
+        <span class="material-symbols-outlined hud-radar-icon" aria-hidden="true">radar</span>
+        <div class="hud-mission">
+          <span class="hud-label hud-label--inline">작전 구역</span>
+          <span id="mission-id" class="hud-mission-id">격자 09 · 알파</span>
         </div>
       </div>
+      <div class="hud-cluster hud-right">
+        <span class="hud-label">경과 시간</span>
+        <span id="timer" class="hud-readout hud-readout--ops">000</span>
+      </div>
+    </header>
 
-      <div class="board-wrap">
-        <div id="board" class="board" role="grid" aria-label="지뢰찾기 판"></div>
+    <main class="main-canvas">
+      <section class="brief" aria-labelledby="op-title">
+        <p class="brief-kicker">작전 / 지뢰밭</p>
+        <h1 id="op-title" class="stencil-title">지뢰찾기</h1>
+        <p class="brief-copy">
+          좌클릭: 열기 · 우클릭: 깃발 표시 · 열린 숫자 칸에서 가운데 클릭 또는 좌·우 버튼 동시 누르기: 주변 칸 열기
+        </p>
+      </section>
+
+      <div class="control-deck">
+        <label class="deck-field">
+          <span class="deck-label">임무 등급</span>
+          <select id="difficulty" class="deck-select">
+            <option value="beginner">초급 — 9×9 / 지뢰 10</option>
+            <option value="intermediate">중급 — 16×16 / 지뢰 40</option>
+            <option value="expert">고급 — 30×16 / 지뢰 99</option>
+          </select>
+        </label>
+        <button
+          type="button"
+          id="face-btn"
+          class="actuator-reset"
+          title="새 게임"
+          aria-label="새 게임"
+        >
+          <span class="face" id="face">&#x1F642;</span>
+          <span class="actuator-caption">초기화</span>
+        </button>
       </div>
 
-      <footer class="footer">
-        <span>첫 클릭은 항상 안전합니다.</span>
-      </footer>
-    </div>
+      <div class="viewport-frame">
+        <div id="board" class="board" role="grid" aria-label="지뢰필드 그리드"></div>
+      </div>
+
+      <div class="status-feed">
+        <span class="status-pulse" aria-hidden="true"></span>
+        <span class="status-text">링크 안정 · 첫 클릭 안전 프로토콜 가동</span>
+      </div>
+    </main>
+
+    <footer class="bottom-strip">
+      <span class="strip-meta">FIELD TERMINAL v1 · TACTICAL BRUTALISM</span>
+    </footer>
 
     <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
       <div class="overlay-card">
-        <h2 id="overlay-title" class="overlay-title">승리!</h2>
+        <p class="overlay-kicker">교신</p>
+        <h2 id="overlay-title" class="overlay-title">승리</h2>
         <p id="overlay-msg" class="overlay-msg"></p>
         <button type="button" id="overlay-btn" class="primary-btn">다시 하기</button>
       </div>

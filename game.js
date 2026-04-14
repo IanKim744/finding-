@@ -7,6 +7,13 @@ const PRESETS = {
   expert: { rows: 16, cols: 30, mines: 99 },
 };
 
+/** @type {Record<Difficulty, string>} */
+const MISSION_IDS = {
+  beginner: "격자 09 · 알파",
+  intermediate: "격자 16 · 브라보",
+  expert: "격자 30 · 찰리",
+};
+
 const NUMBER_CLASS = ["n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8"];
 
 const el = {
@@ -20,6 +27,7 @@ const el = {
   overlayTitle: document.getElementById("overlay-title"),
   overlayMsg: document.getElementById("overlay-msg"),
   overlayBtn: document.getElementById("overlay-btn"),
+  missionId: document.getElementById("mission-id"),
 };
 
 /** @type {Difficulty} */
@@ -295,7 +303,7 @@ function renderCell(button, r, c) {
 }
 
 function buildBoard() {
-  el.board.style.gridTemplateColumns = `repeat(${cols}, var(--cell-size, 28px))`;
+  el.board.style.setProperty("--board-cols", String(cols));
   el.board.innerHTML = "";
   el.board.setAttribute("aria-rowcount", String(rows));
   el.board.setAttribute("aria-colcount", String(cols));
@@ -375,11 +383,11 @@ function refreshAllCells() {
 function showOverlay(didWin) {
   el.overlay.classList.remove("hidden");
   if (didWin) {
-    el.overlayTitle.textContent = "승리!";
-    el.overlayMsg.textContent = `시간: ${seconds}초. 잘 하셨어요!`;
+    el.overlayTitle.textContent = "승리";
+    el.overlayMsg.textContent = `시간 ${seconds}초. 필드를 클리어했습니다.`;
   } else {
-    el.overlayTitle.textContent = "게임 오버";
-    el.overlayMsg.textContent = "지뢰를 밟았습니다. 다음엔 더 조심해요.";
+    el.overlayTitle.textContent = "작전 실패";
+    el.overlayMsg.textContent = "지뢰가 폭발했습니다. 그리드가 손상되었습니다.";
   }
 }
 
@@ -394,6 +402,10 @@ function newGame() {
   rows = p.rows;
   cols = p.cols;
   mineTotal = p.mines;
+
+  if (el.missionId) {
+    el.missionId.textContent = MISSION_IDS[difficulty];
+  }
 
   started = false;
   gameOver = false;
