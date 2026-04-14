@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>지뢰찾기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1 class="title">지뢰찾기</h1>
+        <p class="subtitle">
+          좌클릭: 열기 · 우클릭: 깃발 · 열린 숫자 칸에서 가운데 클릭 또는 좌·우 동시 누르기: 주변
+          열기
+        </p>
+      </header>
+
+      <div class="toolbar">
+        <label class="field">
+          <span class="field-label">난이도</span>
+          <select id="difficulty" class="select">
+            <option value="beginner">초급 (9×9, 지뢰 10)</option>
+            <option value="intermediate">중급 (16×16, 지뢰 40)</option>
+            <option value="expert">고급 (30×16, 지뢰 99)</option>
+          </select>
+        </label>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-label">지뢰</span>
+            <span id="mine-count" class="stat-value lcd">010</span>
+          </div>
+          <button type="button" id="face-btn" class="face-btn" title="새 게임" aria-label="새 게임">
+            <span class="face" id="face">🙂</span>
+          </button>
+          <div class="stat">
+            <span class="stat-label">시간</span>
+            <span id="timer" class="stat-value lcd">000</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="board-wrap">
+        <div id="board" class="board" role="grid" aria-label="지뢰찾기 판"></div>
+      </div>
+
+      <footer class="footer">
+        <span>첫 클릭은 항상 안전합니다.</span>
+      </footer>
+    </div>
+
+    <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
+      <div class="overlay-card">
+        <h2 id="overlay-title" class="overlay-title">승리!</h2>
+        <p id="overlay-msg" class="overlay-msg"></p>
+        <button type="button" id="overlay-btn" class="primary-btn">다시 하기</button>
+      </div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>

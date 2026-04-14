@@ -1,0 +1,338 @@
+:root {
+  --bg: #0f1419;
+  --surface: #1a222d;
+  --border: #2d3a4d;
+  --text: #e8eef5;
+  --muted: #8b9cb3;
+  --accent: #3d9cf0;
+  --accent-dim: #2a6fa8;
+  --cell: #253041;
+  --cell-hover: #2d3c52;
+  --cell-open: #1e2835;
+  --mine: #e85d5d;
+  --flag: #f0c14d;
+  --lcd-bg: #0a0e12;
+  --lcd-on: #c41e3a;
+  --shadow: rgba(0, 0, 0, 0.45);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: "Noto Sans KR", system-ui, sans-serif;
+  background: radial-gradient(ellipse 120% 80% at 50% -20%, #1a2a3d 0%, var(--bg) 55%);
+  color: var(--text);
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.select {
+  appearance: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b9cb3' d='M3 4.5L6 8l3-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+}
+
+.select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  min-width: 4.5rem;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.stat-value.lcd {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+  font-size: 1.35rem;
+  line-height: 1;
+  padding: 0.25rem 0.5rem;
+  background: var(--lcd-bg);
+  border-radius: 6px;
+  color: var(--lcd-on);
+  text-shadow: 0 0 8px rgba(196, 30, 58, 0.35);
+  min-width: 3.2ch;
+  text-align: center;
+}
+
+.face-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #2d3c52 0%, var(--cell) 100%);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.face-btn:hover {
+  transform: scale(1.05);
+}
+
+.face-btn:active {
+  transform: scale(0.96);
+}
+
+.face {
+  font-size: 1.5rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.board-wrap {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 0.25rem;
+}
+
+.board {
+  display: inline-grid;
+  gap: 2px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px var(--shadow);
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.cell {
+  width: var(--cell-size, 28px);
+  height: var(--cell-size, 28px);
+  border: none;
+  border-radius: 4px;
+  background: var(--cell);
+  color: var(--text);
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+  font-size: calc(var(--cell-size, 28px) * 0.55);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s ease, transform 0.08s ease;
+}
+
+.cell:hover:not(:disabled) {
+  background: var(--cell-hover);
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.cell.open {
+  background: var(--cell-open);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.cell.open.n0 {
+  color: transparent;
+}
+
+.cell.open.n1 {
+  color: #3d9cf0;
+}
+.cell.open.n2 {
+  color: #4caf50;
+}
+.cell.open.n3 {
+  color: #e85d5d;
+}
+.cell.open.n4 {
+  color: #9c27b0;
+}
+.cell.open.n5 {
+  color: #ff9800;
+}
+.cell.open.n6 {
+  color: #00bcd4;
+}
+.cell.open.n7 {
+  color: #eceff1;
+}
+.cell.open.n8 {
+  color: #78909c;
+}
+
+.cell.flagged:not(.open) {
+  color: var(--flag);
+}
+
+.cell.mine-hit {
+  background: rgba(232, 93, 93, 0.35);
+}
+
+.cell.mine-reveal {
+  background: var(--cell-open);
+}
+
+.cell.wrong-flag {
+  color: var(--mine);
+  font-size: calc(var(--cell-size, 28px) * 0.45);
+}
+
+.footer {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 12, 0.72);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.75rem 1.5rem;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 24px 64px var(--shadow);
+}
+
+.overlay-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+}
+
+.overlay-msg {
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.primary-btn {
+  appearance: none;
+  border: none;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-dim) 100%);
+  color: #fff;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.primary-btn:hover {
+  filter: brightness(1.08);
+}
+
+.primary-btn:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 520px) {
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .board {
+    --cell-size: 24px;
+  }
+}
